@@ -1,0 +1,16 @@
+.nojekyll
+404.html
+FILES.txt
+README.md
+VERSION
+app.js
+bookmarklet-source.js
+icon-192.png
+icon-512.png
+icon.svg
+index.html
+manifest.webmanifest
+privacy.html
+robots.txt
+styles.css
+sw.js

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Corregge localmente le etichette di reso Amazon impaginate male e le prepara per A4.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+  <meta name="referrer" content="no-referrer">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Amazon Return Fixer</title>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Amazon Return Fixer</h1>
+      <p>Etichette A4 corrette, direttamente nel browser.</p>
+    </div>
+    <button id="installBtn" class="secondary hidden" type="button">Installa app</button>
+  </header>
+
+  <main>
+    <section class="privacy card">
+      <strong>Locale e privato.</strong> I PDF vengono elaborati sul dispositivo. Non vengono caricati sul nostro server.
+      <span class="small">Il PDF resta nel browser. Nessun backend e nessun upload. Le librerie PDF sono caricate da CDN con versione fissata e vengono memorizzate dalla PWA dopo il primo uso. <a href="./privacy.html">Privacy</a>.</span>
+    </section>
+
+    <section class="card">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="pdf" type="button">PDF</button>
+        <button class="tab" data-tab="link" type="button">Link Amazon</button>
+        <button class="tab" data-tab="bookmarklet" type="button">Bookmarklet</button>
+      </div>
+
+      <div id="tab-pdf" class="tabpane active">
+        <h2>Correggi un PDF già scaricato</h2>
+        <p>Se Amazon/Chrome ha diviso o deformato le etichette su più fogli, carica qui il PDF.</p>
+        <label id="dropZone" class="dropzone">
+          <input id="pdfInput" type="file" accept="application/pdf,.pdf" hidden>
+          <span class="drop-title">Scegli PDF</span>
+          <span class="small">oppure trascinalo qui</span>
+        </label>
+      </div>
+
+      <div id="tab-link" class="tabpane">
+        <h2>Parti dal link Amazon</h2>
+        <p>Incolla anche il lungo link <code>/gp/r.html?...</code>. L'app estrae localmente il vero link dell'etichetta e redige token/identificatori nel debug.</p>
+        <div class="row-stack">
+          <textarea id="amazonLink" rows="4" placeholder="https://www.amazon.it/gp/r.html?... oppure https://www.amazon.it/spr/returns/label/..."></textarea>
+          <button id="prepareLinkBtn" type="button">Prepara apertura Amazon</button>
+        </div>
+        <div id="linkResult" class="link-result hidden">
+          <p><strong>Passo 1.</strong> Apri la pagina Amazon già autenticata.</p>
+          <a id="openAmazonBtn" class="button" target="_blank" rel="noopener">Apri Amazon</a>
+          <p><strong>Passo 2.</strong> Nella pagina Amazon esegui il bookmarklet <strong>🖨 Reso Amazon A4</strong>. Su Android Chrome: digita il nome del preferito nella barra indirizzi e tocca il suggerimento.</p>
+          <button id="copyBookmarkletBtnLink" class="secondary" type="button">Copia bookmarklet</button>
+        </div>
+      </div>
+
+      <div id="tab-bookmarklet" class="tabpane">
+        <h2>Stampa direttamente dalla pagina Amazon</h2>
+        <p>Il bookmarklet gira dentro la pagina Amazon con la tua sessione: trova i fogli A4 originali, ti fa scegliere cosa stampare e crea una vista di stampa pulita.</p>
+        <div class="bookmark-box">
+          <a id="bookmarkletAnchor" class="button" href="#">🖨 Reso Amazon A4</a>
+          <button id="copyBookmarkletBtn" class="secondary" type="button">Copia bookmarklet</button>
+        </div>
+        <details>
+          <summary>Come usarlo su Android Chrome</summary>
+          <ol>
+            <li>Premi <strong>Copia bookmarklet</strong>.</li>
+            <li>Crea un nuovo preferito qualsiasi e chiamalo <strong>Reso Amazon A4</strong>.</li>
+            <li>Modifica il preferito e sostituisci l'indirizzo con il testo copiato.</li>
+            <li>Apri l'etichetta Amazon. Nella barra indirizzi digita <strong>Reso Amazon A4</strong> e scegli il preferito dai suggerimenti.</li>
+          </ol>
+        </details>
+      </div>
+    </section>
+
+    <section id="analysisSection" class="card hidden">
+      <div class="section-head">
+        <div>
+          <h2 id="analysisTitle">Contenuto trovato</h2>
+          <p id="analysisSummary"></p>
+        </div>
+        <div class="quick-actions">
+          <button id="selectRecommended" class="secondary" type="button">Consigliati</button>
+          <button id="selectLabels" class="secondary" type="button">Solo etichette</button>
+          <button id="selectAll" class="secondary" type="button">Tutto</button>
+        </div>
+      </div>
+      <div id="componentList" class="components"></div>
+      <div class="exportbar">
+        <label>Margine A4
+          <select id="marginSelect">
+            <option value="3">3 mm</option>
+            <option value="5" selected>5 mm</option>
+            <option value="7">7 mm</option>
+            <option value="10">10 mm</option>
+          </select>
+        </label>
+        <button id="generateBtn" type="button">Crea PDF A4 corretto</button>
+      </div>
+    </section>
+
+    <section id="resultSection" class="card hidden">
+      <h2>PDF pronto</h2>
+      <p id="resultSummary"></p>
+      <div class="result-actions">
+        <button id="openPdfBtn" type="button">Apri PDF / Stampa</button>
+        <button id="downloadPdfBtn" class="secondary" type="button">Scarica PDF</button>
+        <button id="sharePdfBtn" class="secondary hidden" type="button">Condividi</button>
+      </div>
+    </section>
+
+    <section class="card debug-card">
+      <details id="debugDetails">
+        <summary>Debug temporaneo</summary>
+        <p class="small">Non registra il contenuto del PDF né i valori dei token Amazon. Se qualcosa non va, premi Copia debug e incollalo in chat.</p>
+        <div class="debug-actions">
+          <button id="copyDebugBtn" class="secondary" type="button">Copia debug</button>
+          <button id="clearDebugBtn" class="secondary" type="button">Azzera debug</button>
+        </div>
+        <pre id="debugOutput"></pre>
+      </details>
+    </section>
+  </main>
+
+  <footer class="app-footer"><span>v0.4.0 · GitHub Pages · elaborazione locale</span> · <a href="./privacy.html">Privacy</a></footer>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
