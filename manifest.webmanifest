@@ -1,16 +1,24 @@
 {
+  "id": "./",
   "name": "Amazon Return Print Fixer",
   "short_name": "Return Fixer",
   "description": "Corregge localmente le etichette di reso Amazon per la stampa A4.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#f3f4f6",
   "theme_color": "#111827",
+  "orientation": "any",
   "categories": ["utilities", "productivity"],
   "icons": [
     {"src":"./icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
     {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ],
+  "shortcuts": [
+    {"name":"Correggi PDF","short_name":"PDF","url":"./?tab=pdf","icons":[{"src":"./icon-192.png","sizes":"192x192","type":"image/png"}]},
+    {"name":"Link Amazon","short_name":"Link","url":"./?tab=link","icons":[{"src":"./icon-192.png","sizes":"192x192","type":"image/png"}]},
+    {"name":"Bookmarklet","short_name":"Bookmarklet","url":"./?tab=bookmarklet","icons":[{"src":"./icon-192.png","sizes":"192x192","type":"image/png"}]}
   ],
   "share_target": {
     "action": "./share-target",

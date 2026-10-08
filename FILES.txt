@@ -1,10 +1,12 @@
 .nojekyll
 404.html
-FILES.txt
+CHANGELOG.md
 README.md
+TROUBLESHOOTING.md
 VERSION
 app.js
 bookmarklet-source.js
+bookmarklet.min.js
 icon-192.png
 icon-512.png
 icon.svg

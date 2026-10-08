@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>Privacy — Amazon Return Fixer</title><style>body{font:16px system-ui;max-width:760px;margin:40px auto;padding:0 18px;line-height:1.55}code{background:#eee;padding:2px 5px;border-radius:5px}a{color:#2563eb}</style></head><body>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>Privacy — Amazon Return Fixer</title><style>body{font:16px system-ui;max-width:760px;margin:40px auto;padding:0 18px;line-height:1.55;color:#111827}code{background:#eee;padding:2px 5px;border-radius:5px}a{color:#2563eb}.note{background:#ecfdf5;border-left:4px solid #10b981;padding:12px}</style></head><body>
 <h1>Privacy</h1>
-<p>Amazon Return Fixer è una PWA statica: i PDF selezionati vengono letti e trasformati nel browser del dispositivo. Il progetto non contiene backend, API, database o endpoint di upload.</p>
-<p>Le librerie PDF JavaScript sono caricate da CDN pubbliche con versioni fissate. I CDN ricevono la normale richiesta dei file JavaScript (come per qualunque risorsa web), ma il contenuto dei PDF non viene inviato ai CDN.</p>
-<p>I link Amazon vengono analizzati localmente per estrarre l'URL di destinazione. Il bookmarklet viene eseguito nella pagina Amazon già aperta nel browser e non invia cookie o credenziali a Return Fixer.</p>
-<p>Il debug redige query, token e identificatori sensibili prima di mostrarli.</p>
+<p class="note"><strong>I PDF restano sul dispositivo.</strong> Amazon Return Fixer è una PWA statica e non possiede un backend, un database o un endpoint di upload.</p>
+<p>I PDF selezionati o ricevuti tramite il menu Condividi vengono letti e trasformati nel browser. Per i file condivisi, il service worker usa temporaneamente la Cache Storage locale del browser per passare il PDF alla schermata dell'app; dopo l'apertura la copia temporanea viene rimossa.</p>
+<p>PDF.js 6.4.299 e pdf-lib 1.17.1 sono caricati da CDN pubbliche con versione fissata e possono essere memorizzati nella cache del browser. I CDN ricevono la normale richiesta dei file JavaScript, ma <strong>non ricevono il contenuto dei PDF</strong>.</p>
+<p>I link Amazon vengono analizzati localmente per estrarre la destinazione. Query e token non vengono inclusi nel debug. Il bookmarklet viene eseguito direttamente nella pagina Amazon già aperta e non invia cookie, password o etichette a Return Fixer.</p>
+<p>Il sito usa <code>noindex</code> e <code>robots.txt</code> per scoraggiare l'indicizzazione. Questo non equivale a un'autenticazione: un sito GitHub Pages resta accessibile a chi conosce l'URL.</p>
 <p><a href="./">Torna all'app</a></p>
 </body></html>
